@@ -29,7 +29,8 @@
   var sceneListToggleElement = document.querySelector('#sceneListToggle');
   var autorotateToggleElement = document.querySelector('#autorotateToggle');
   var fullscreenToggleElement = document.querySelector('#fullscreenToggle');
-
+  var themeToggleElement = document.querySelector('#themeToggle');
+  var themeIconElement = themeToggleElement.querySelector('.icon');
   // Detect desktop or mobile mode.
   if (window.matchMedia) {
     var setMode = function() {
@@ -136,6 +137,18 @@
   } else {
     document.body.classList.add('fullscreen-disabled');
   }
+  // Set up theme from storage
+  var storedTheme = window.localStorage.getItem('theme');
+  if (storedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  }
+  updateThemeIcon();
+  themeToggleElement.addEventListener('click', function() {
+    document.body.classList.toggle('light-mode');
+    var theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+    window.localStorage.setItem('theme', theme);
+    updateThemeIcon();
+  });
 
   // Set handler for scene list toggle.
   sceneListToggleElement.addEventListener('click', toggleSceneList);
@@ -384,6 +397,13 @@
       }
     }
     return null;
+  }
+  function updateThemeIcon() {
+    if (document.body.classList.contains('light-mode')) {
+      themeIconElement.textContent = '🌙';
+    } else {
+      themeIconElement.textContent = '☀';
+    }
   }
 
   // Display the initial scene.
